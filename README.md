@@ -39,7 +39,7 @@ Usage
     Enter ending port (e.g. 1024): 80
     
     
-    Contributing
+Contributing
     
     This project is open source. To contribute, please send a pull request.
     License
