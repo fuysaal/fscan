@@ -16,32 +16,32 @@ Usage
 
     Clone this project to your computer:
 
-git clone https://github.com/fuysaal/fscan.git
+    git clone https://github.com/fuysaal/fscan.git
 
 
-Install the required dependencies (if any):
+    Install the required dependencies (if any):
 
-pip install -r requirements.txt
-
-
-To start the port scan, use the following command:
-
-python fscan.py
-
-
-For example:
-
-python3 fscan.py
-
-Enter target IP address or domain name: 127.0.0.1
-IP address: 127.0.0.1
-Enter starting port (e.g. 1): 21
-Enter ending port (e.g. 1024): 80
-
-
-Contributing
-
-This project is open source. To contribute, please send a pull request.
-License
-
-This project is licensed under the MIT License.
+    pip install -r requirements.txt
+    
+    
+    To start the port scan, use the following command:
+    
+    python fscan.py
+    
+    
+    For example:
+    
+    python3 fscan.py
+    
+    Enter target IP address or domain name: 127.0.0.1
+    IP address: 127.0.0.1
+    Enter starting port (e.g. 1): 21
+    Enter ending port (e.g. 1024): 80
+    
+    
+    Contributing
+    
+    This project is open source. To contribute, please send a pull request.
+    License
+    
+    This project is licensed under the MIT License.
