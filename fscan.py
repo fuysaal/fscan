@@ -141,8 +141,218 @@ def get_service_version(service, target, port):
         except:
             return ""
 
-    return ""
+    if service == 'imap':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
 
+    if service == 'pop3':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'ldap':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'snmp':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'mongodb':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            sock.send(b"\x16\x00\x00\x00\x00\x00\x00\x00")
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'dns':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            sock.send(b"\x00\x00")
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'http_proxy':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'bgp':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'xmpp':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'mta':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'kerberos':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'ntp':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.settimeout(TIMEOUT)
+            sock.sendto(b'\x17\x00\x03\xe8', (target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'imaps':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'pop3s':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'ftpes':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'elasticsearch':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'cassandra':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'smb':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    if service == 'ldaps':
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(TIMEOUT)
+            sock.connect((target, port))
+            banner = sock.recv(1024).decode().strip()
+            sock.close()
+            return banner
+        except:
+            return ""
+
+    return ""
 
 def scan_port(target, port):
     try:
