@@ -2,7 +2,6 @@ import socket
 import threading
 import time
 import requests
-import logging
 import random
 import string
 
@@ -10,39 +9,34 @@ open_ports = []
 lock = threading.Lock()
 TIMEOUT = 1.5
 
-logging.basicConfig(filename='scan.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+def rand_str(len_):
+    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(len_))
 
-def gen_random_string(length):
-    return ''.join(random.choice(string.ascii_letters + string.digits) for i in range(length))
-
-def get_target_ip(target):
+def resolve_target(target):
     try:
         return socket.gethostbyname(target)
     except socket.gaierror:
-        logging.error(f"Unable to resolve IP for {target}.")
         return None
 
-def fetch_service_info(service_type, target, port):
-    try:
-        if service_type == 'http' or service_type == 'https':
-            return fetch_http_info(target, port)
-        if service_type == 'mongodb':
-            return fetch_mongo_info(target, port)
-        if service_type == 'ftp':
-            return fetch_ftp_info(target, port)
-        if service_type == 'postgresql':
-            return fetch_postgres_info(target, port)
-        if service_type == 'ssh':
-            return fetch_ssh_info(target, port)
+def retrieve_info(service_type, target, port):
+    if service_type in ['http', 'https']:
+        return get_http_info(target, port)
+    elif service_type == 'mongodb':
+        return get_mongo_info(target, port)
+    elif service_type == 'ftp':
+        return get_ftp_info(target, port)
+    elif service_type == 'postgresql':
+        return get_postgres_info(target, port)
+    elif service_type == 'ssh':
+        return get_ssh_info(target, port)
+    else:
         return generic_service_info(target, port)
-    except Exception as e:
-        return f"Error: {str(e)}"
 
-def fetch_http_info(target, port):
+def get_http_info(target, port):
     try:
-        status_code = fetch_http_status(target, port)
-        version = requests.get(f"http://{target}:{port}", timeout=TIMEOUT).headers.get('Server', 'Unknown')
-        return f"HTTP {status_code} - {version}"
+        status = fetch_http_status(target, port)
+        server = requests.get(f"http://{target}:{port}", timeout=TIMEOUT).headers.get('Server', 'Unknown')
+        return f"HTTP {status} - {server}"
     except requests.exceptions.RequestException:
         return "Error"
 
@@ -53,7 +47,7 @@ def fetch_http_status(target, port):
     except requests.exceptions.RequestException:
         return "Error"
 
-def fetch_mongo_info(target, port):
+def get_mongo_info(target, port):
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(TIMEOUT)
@@ -65,7 +59,7 @@ def fetch_mongo_info(target, port):
     except Exception:
         return "Error"
 
-def fetch_ftp_info(target, port):
+def get_ftp_info(target, port):
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(TIMEOUT)
@@ -76,7 +70,7 @@ def fetch_ftp_info(target, port):
     except Exception:
         return "Error"
 
-def fetch_postgres_info(target, port):
+def get_postgres_info(target, port):
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(TIMEOUT)
@@ -87,7 +81,7 @@ def fetch_postgres_info(target, port):
     except Exception:
         return "Error"
 
-def fetch_ssh_info(target, port):
+def get_ssh_info(target, port):
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(TIMEOUT)
@@ -109,7 +103,7 @@ def generic_service_info(target, port):
     except Exception:
         return "Error"
 
-def attempt_scan(target, port):
+def scan_single_port(target, port):
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(TIMEOUT)
@@ -121,49 +115,49 @@ def attempt_scan(target, port):
     except socket.error:
         pass
 
-def perform_scan(target, start_port, end_port):
+def execute_scan(target, start_port, end_port):
     threads = []
     for port in range(start_port, end_port + 1):
-        t = threading.Thread(target=attempt_scan, args=(target, port))
+        t = threading.Thread(target=scan_single_port, args=(target, port))
         threads.append(t)
         t.start()
     for t in threads:
         t.join()
 
-def save_scan_results(target, open_ports):
-    with open("open_ports_results.txt", "w") as f:
-        f.write(f"Results for {target}:\n")
+def write_scan_results(target, open_ports):
+    with open("scan_results.txt", "w") as f:
+        f.write(f"Scan results for {target}:\n")
         for port in open_ports:
             try:
                 service = socket.getservbyport(port, 'tcp')
-                version = fetch_service_info(service, target, port)
+                version = retrieve_info(service, target, port)
                 f.write(f"Port {port}: {service} - Version: {version}\n")
             except Exception as e:
                 f.write(f"Port {port}: Error: {e}\n")
-    logging.info(f"Scan results saved for {target}.")
 
 def main():
-    targets_input = input("Enter target IP or domain names (comma-separated): ")
-    targets = [target.strip() for target in targets_input.split(',')]
+    input_target = input("Enter target IP or domain: ")
+    target_ip = resolve_target(input_target)
     
+    if target_ip is None:
+        print("Invalid target.")
+        return
+
+    print(f"Target IP resolved: {target_ip}")
+
     start_port = int(input("Starting port: "))
     end_port = int(input("Ending port: "))
 
-    logging.info(f"Initiating scan for targets: {targets}...")
     start_time = time.time()
 
-    for target in targets:
-        ip_address = get_target_ip(target)
-        if ip_address is None:
-            continue
-        perform_scan(ip_address, start_port, end_port)
+    execute_scan(target_ip, start_port, end_port)
 
     if open_ports:
         print("Port\tStatus\tService\tVersion")
         for port in open_ports:
             try:
                 service = socket.getservbyport(port, 'tcp')
-                version = fetch_service_info(service, targets[0], port)
+                version = retrieve_info(service, input_target, port)
             except OSError:
                 service = ""
                 version = ""
@@ -172,10 +166,9 @@ def main():
         print("No open ports found.")
 
     end_time = time.time()
-    logging.info(f"Scan completed. Duration: {end_time - start_time} seconds.")
     print(f"Scan completed in {end_time - start_time} seconds.")
 
-    save_scan_results(targets[0], open_ports)
+    write_scan_results(input_target, open_ports)
 
 if __name__ == "__main__":
     main()
