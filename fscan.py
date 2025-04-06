@@ -1,12 +1,11 @@
 import socket
 import threading
 import time
-import requests  # For sending HTTP requests
+import requests
 
 open_ports = []
 lock = threading.Lock()
 TIMEOUT = 1.5
-
 
 def get_ip(target):
     try:
@@ -16,343 +15,29 @@ def get_ip(target):
         print("Target IP address could not be resolved.")
         return None
 
-
 def get_service_version(service, target, port):
-    if service == 'http' or service == 'https':
+    def handle_request():
         try:
-            url = f"http://{target}:{port}"
-            response = requests.get(url, timeout=TIMEOUT)
-            server_header = response.headers.get('Server')
-            return server_header
-        except requests.exceptions.RequestException:
+            if service == 'http' or service == 'https':
+                return requests.get(f"http://{target}:{port}", timeout=TIMEOUT).headers.get('Server', "")
+            if service in ['ftp', 'ssh', 'smtp', 'telnet', 'mysql', 'postgresql', 'redis', 'rdp', 'mssql', 'vnc', 'imap', 'pop3', 'ldap', 'snmp', 'mongodb', 'dns', 'http_proxy', 'bgp', 'xmpp', 'mta', 'kerberos', 'ntp', 'imaps', 'pop3s', 'ftpes', 'elasticsearch', 'cassandra', 'smb', 'ldaps']:
+                return socket_connection(target, port)
+            return ""
+        except Exception as e:
             return ""
 
-    if service == 'ftp':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
+    return handle_request()
 
-    if service == 'ssh':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'smtp':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    # New services added
-
-    if service == 'telnet':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'mysql':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            sock.send(b"\\r\\n")
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'postgresql':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'redis':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            sock.send(b"*1\r\n$4\r\nINFO\r\n")
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'rdp':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'mssql':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'vnc':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'imap':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'pop3':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'ldap':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'snmp':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'mongodb':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            sock.send(b"\x16\x00\x00\x00\x00\x00\x00\x00")
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'dns':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            sock.send(b"\x00\x00")
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'http_proxy':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'bgp':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'xmpp':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'mta':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'kerberos':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'ntp':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock.settimeout(TIMEOUT)
-            sock.sendto(b'\x17\x00\x03\xe8', (target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'imaps':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'pop3s':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'ftpes':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'elasticsearch':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'cassandra':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'smb':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    if service == 'ldaps':
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(TIMEOUT)
-            sock.connect((target, port))
-            banner = sock.recv(1024).decode().strip()
-            sock.close()
-            return banner
-        except:
-            return ""
-
-    return ""
+def socket_connection(target, port):
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(TIMEOUT)
+        sock.connect((target, port))
+        banner = sock.recv(1024).decode().strip()
+        sock.close()
+        return banner
+    except:
+        return ""
 
 def scan_port(target, port):
     try:
@@ -366,18 +51,14 @@ def scan_port(target, port):
     except socket.error:
         pass
 
-
 def port_scan(target, start_port, end_port):
     threads = []
     for port in range(start_port, end_port + 1):
         t = threading.Thread(target=scan_port, args=(target, port))
         threads.append(t)
         t.start()
-        for t in threads:
-            t.join()
-        for t in threads:
-            t.join()
-
+    for t in threads:
+        t.join()
 
 def save_results(target, open_ports):
     with open("open_ports.txt", "w") as f:
@@ -391,14 +72,10 @@ def save_results(target, open_ports):
                 f.write(f"Port: {port}, Error: {e}\n")
     print("Results saved to open_ports.txt.")
 
-
 def main():
     target = input("Enter target IP address or domain name: ")
     ip_address = get_ip(target)
-
-    if ip_address is None:
-        return
-
+    if not ip_address: return
     print(f"IP address: {ip_address}")
 
     start_port = int(input("Enter starting port (e.g. 1): "))
@@ -418,14 +95,12 @@ def main():
             except OSError:
                 service = ""
                 version = ""
-
             print(f"{port}\topen\t{service}\t\t{version}")
     else:
         print("No open ports found.")
 
     end_time = time.time()
     print(f"Scan completed. Time: {end_time - start_time} seconds.")
-
 
 if __name__ == "__main__":
     main()
