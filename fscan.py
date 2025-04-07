@@ -1,3 +1,27 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+"""
+###########################################################
+#                                                         #
+#                      fscan - Port Scanner               #
+#                                                         #
+# Author: fuysaal                                         #
+# Description: A simple port scanner that scans a range   #
+# of ports on a target server and provides service info.  #
+#                                                         #
+# Version: 1.0                                            #
+# Created on: 2025-04-07                                  #
+#                                                         #
+###########################################################
+
+   	   @@@@@  @@@@@   @@@@@   @@@@@  @    @     
+   	   @      @       @       @   @  @@   @     
+   	   @@@    @@@@@   @       @@@@@  @ @  @     
+   	   @          @   @       @   @  @  @ @     
+   	   @      @@@@@   @@@@@   @   @  @    @		
+
+"""
+
 import socket
 import threading
 import time
@@ -136,6 +160,17 @@ def write_scan_results(target, open_ports):
                 f.write(f"Port {port}: Error: {e}\n")
 
 def main():
+    
+    print("""
+===========================================================
+   	   @@@@@  @@@@@   @@@@@   @@@@@  @    @     
+   	   @      @       @       @   @  @@   @     
+   	   @@@    @@@@@   @       @@@@@  @ @  @     
+   	   @          @   @       @   @  @  @ @     
+   	   @      @@@@@   @@@@@   @   @  @    @		
+===========================================================
+    """)
+
     input_target = input("Enter target IP or domain: ")
     target_ip = resolve_target(input_target)
     
