@@ -12,21 +12,21 @@
 # Version: 1.0                                            #
 # Created on: 2025-04-07                                  #
 #                                                         #
-# Dependencies:                                            #
-#   - socket                                               #
-#   - threading                                            #
-#   - requests                                             #
-#   - random                                               #
-#   - string                                               #
+# Dependencies:                                           #
+#   - socket                                              #
+#   - threading                                           #
+#   - requests                                            #
+#   - random                                              #
+#   - string                                              #
 #                                                         #
-# Usage:                                                   #
-#   1. Run the script: python3 fscan.py                    #
+# Usage:                                                  #
+#   1. Run the script: python3 fscan.py                   #
 #   2. Enter the target IP/domain and the range of ports. #
 #                                                         #
-# License:                                                 #
-#   MIT License                                            #
+# License:                                                #
+#   MIT License                                           #
 #                                                         #
-# GitHub: https://github.com/yourusername/fscan            #
+# GitHub: https://github.com/yourusername/fscan           #
 #                                                         #
 ###########################################################
 
