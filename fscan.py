@@ -26,7 +26,7 @@
 # License:                                                #
 #   MIT License                                           #
 #                                                         #
-# GitHub: https://github.com/yourusername/fscan           #
+# GitHub: https://github.com/fuysaal/fscan                #
 #                                                         #
 ###########################################################
 
